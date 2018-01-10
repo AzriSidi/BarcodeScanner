@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0288D1</color>
+    <color name="colorPrimaryDark">#01579B</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="actionbar_opacity">#33000000</color>
+    <color name="textColor">#000000</color>
+    <color name="column1Color">#b0b0b0</color>
+    <color name="column2Color">#a09f9f</color>
+    <color name="orange">#FF9900</color>
+    <color name="green">#009900</color>
+    <color name="blue">#000099</color>
+    <color name="white">#ffffff</color>
+    <color name="bg_row_background">#fa315b</color>
+    <color name="deleteColor">#D32F2F</color>
+</resources>

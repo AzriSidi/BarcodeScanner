@@ -1,0 +1,68 @@
+package app.num.barcodescannerproject;
+
+import android.widget.TextView;
+
+class Constant {
+    public static String getResult = "";
+    public static String getFormat = "";
+    public static String title = "";
+    public static String noBp = "";
+    public static String noPesan = "";
+    public static String noSiri = "";
+    public static String jenisAsset = "";
+    public static String kategori = "";
+    public static String subKategori = "";
+    public static String model = "";
+    public static String buatan = "";
+    public static String harga = "";
+    public static String enjin = "";
+    public static String tkhTerima = "";
+    public static String casis = "";
+    public static String noPendaftar = "";
+    public static String tempoh = "";
+    public static String aksesori = "";
+    public static String nama = "";
+    public static String nama1 = "";
+    public static String alamat1 = "";
+    public static String alamat2 = "";
+    public static String alamat3 = "";
+    public static String alamat4 = "";
+    public static String penyenlengara = "";
+    public static String jabPenempat = "";
+    public static String pegPenempat = "";
+    public static String lokasi = "";
+    public static String tkhPenempat = "";
+    public static String ketuaJab = "";
+    public static String tkh = "";
+    public static String message = "";
+
+    public static TextView textNoBP;
+    public static TextView textNoPesan;
+    public static TextView textNoSiri;
+    public static TextView textJenisAsset;
+    public static TextView textKate;
+    public static TextView textSubKate;
+    public static TextView textModel;
+    public static TextView textBuatan;
+    public static TextView textHarga;
+    public static TextView textEnjin;
+    public static TextView textTkhTerima;
+    public static TextView textCasis;
+    public static TextView textNoPendaftar;
+    public static TextView textTempoh;
+    public static TextView textAksesori;
+    public static TextView textNama;
+    public static TextView textNama1;
+    public static TextView textAlamat1;
+    public static TextView textAlamat2;
+    public static TextView textAlamat3;
+    public static TextView textAlamat4;
+    public static TextView textPenyenggara;
+    public static TextView textJabPenempat;
+    public static TextView textPegPenempat;
+    public static TextView textLokasi;
+    public static TextView textTkhPenempat;
+    public static TextView textKetuaJab;
+    public static TextView textTkh;
+    public static TextView textTitle;
+}

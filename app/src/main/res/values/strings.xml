@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">QR Code Scanner</string>
+    <string name="title_activity_view_detail">View Detail</string>
+    <string name="open_scanner">Scanner</string>
+    <string name="output">Output</string>
+    <string name="result">Result</string>
+    <string name="type">Type</string>
+    <string name="time">Time</string>
+    <string name="action_main_page">Main Page</string>
+    <string name="action_scan">Scan Page</string>
+    <string name="action_result">Show Result</string>
+    <string name="action_notification">action_notification</string>
+    <string name="file">file</string>
+    <string name="title_activity_show_result">Show Result</string>
+    <string name="large_text">No Result</string>
+    <string name="clear_all">Clear all</string>
+    <string name="snackBar_mgs">No connection to server</string>
+    <string name="todo">TODO</string>
+    <string name="delete">Delete</string>
+</resources>
