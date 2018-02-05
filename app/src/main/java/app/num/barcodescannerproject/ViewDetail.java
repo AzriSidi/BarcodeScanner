@@ -40,8 +40,7 @@ public class ViewDetail extends AppCompatActivity {
     TableLayout tableLayout;
     TextView tv1;
     private ImageView image;
-    String urlJson = "https://webmpsp01.mpsp.gov.my/ebayar/asset_json.php?no_siri=";
-    //String urlJson = "http://192.168.0.147/asset/asset_json.php?no_siri=";
+    String urlJson = "https://mpsppay.mpsp.gov.my/old_ebayar/asset_json.php?no_siri=";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +139,6 @@ public class ViewDetail extends AppCompatActivity {
         intent = getIntent();
         getNoSiri = intent.getStringExtra("result");
         String url = urlJson+getNoSiri;
-        Log.d(TAG, "Json url: "+url);
         showpDialog();
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -150,7 +148,6 @@ public class ViewDetail extends AppCompatActivity {
                 Log.d(TAG, "Response from url: "+response.toString());
                 try {
                     dataAsset = response.getJSONObject("data_asset");
-
                     if(dataAsset.has("message")){
                         Constant.message = dataAsset.getString("message");
                         Log.e(TAG,Constant.message);
@@ -188,7 +185,6 @@ public class ViewDetail extends AppCompatActivity {
                     Constant.tkhPenempat = dataAsset.getString("tkh_penempatan");
                     Constant.ketuaJab = dataAsset.getString("ketua_jabatan");
                     Constant.tkh = dataAsset.getString("tkh");
-
                     jsonTextView();
 
                 } catch (JSONException e) {
