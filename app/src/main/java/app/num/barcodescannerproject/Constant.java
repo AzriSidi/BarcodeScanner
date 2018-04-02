@@ -65,4 +65,6 @@ class Constant {
     public static TextView textKetuaJab;
     public static TextView textTkh;
     public static TextView textTitle;
+    public static boolean connectedToWiFi = false;
+    public static boolean connected3G = false;
 }

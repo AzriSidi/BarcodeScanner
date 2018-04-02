@@ -1,9 +1,15 @@
 package app.num.barcodescannerproject;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -40,6 +46,9 @@ public class ViewDetail extends AppCompatActivity {
     TableLayout tableLayout;
     TextView tv1;
     private ImageView image;
+    String title,mgs;
+    BroadcastReceiver networkStateReceiver;
+    IntentFilter networkIntentFilter;
     String urlJson = "https://mpsppay.mpsp.gov.my/old_ebayar/asset_json.php?no_siri=";
 
     @Override
@@ -82,18 +91,56 @@ public class ViewDetail extends AppCompatActivity {
         setSupportActionBar(toolbar);
         tableLayout = findViewById(R.id.tableLayout);
 
-        mSwipeRefreshLayout = findViewById(R.id.activity_main_swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshContent();
-                jsonDataAsset();
-            }
-        });
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
-
-        myDialog();
+        swipeRefresh();
+        loadDialog();
         jsonDataAsset();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        networkStateReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                queryNetwork();
+            }
+        };
+        networkIntentFilter = new IntentFilter(
+                ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkStateReceiver, networkIntentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(networkStateReceiver);
+    }
+
+    private void queryNetwork() {
+        try {
+            ConnectivityManager connMgr = (ConnectivityManager) this
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo wifi = connMgr
+                    .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            NetworkInfo mobile = connMgr
+                    .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            Constant.connected3G = mobile.isConnected();
+            Constant.connectedToWiFi = wifi.isConnected();
+            // added by amir on 2013-01-08
+
+            if (Constant.connectedToWiFi) {
+                jsonDataAsset();
+            } else if (Constant.connected3G) {
+                jsonDataAsset();
+            } else if ((!Constant.connectedToWiFi) && (!Constant.connected3G)) {
+                mySnackBar();
+                tableLayout.setVisibility(View.INVISIBLE);
+            }
+
+           Log.d(TAG, "myStatus: "+Constant.connectedToWiFi);
+        } catch (Exception e) {
+            Log.e(TAG, "Exception: "+e.toString());
+        }
     }
 
     @Override
@@ -125,12 +172,27 @@ public class ViewDetail extends AppCompatActivity {
         }
     }
 
+    private void swipeRefresh(){
+        mSwipeRefreshLayout = findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshContent();
+            }
+        });
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+    }
+
     private void refreshContent() {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(false);
-                jsonDataAsset();
+                if((!Constant.connectedToWiFi) && (!Constant.connected3G)){
+                    mySnackBar();
+                }else {
+                    jsonDataAsset();
+                }
             }
         },1000);
     }
@@ -138,7 +200,8 @@ public class ViewDetail extends AppCompatActivity {
     private void jsonDataAsset() {
         intent = getIntent();
         getNoSiri = intent.getStringExtra("result");
-        String url = urlJson+getNoSiri;
+        final String url = urlJson+getNoSiri;
+        Log.d(TAG, "Full url: "+url);
         showpDialog();
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
@@ -198,10 +261,31 @@ public class ViewDetail extends AppCompatActivity {
                 Log.e(TAG, "ErrorResponse: "+error.getMessage());
                 tableLayout.setVisibility(View.INVISIBLE);
                 pDialog.dismiss();
-                mySnackBar();
             }
         });
         AppController.getInstance().addToRequestQueue(jsonObjReq);
+    }
+
+    public void dialogBox(){
+        title = "Error message";
+        mgs = "Failed to get data from server.";
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        onBackPressed();
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(title)
+                .setMessage(mgs).
+                setPositiveButton("Ok", dialogClickListener)
+                .setCancelable(false)
+                .show();
     }
 
     private void alertDialog(){
@@ -239,7 +323,7 @@ public class ViewDetail extends AppCompatActivity {
         view.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
-    private void myDialog(){
+    private void loadDialog(){
         pDialog = new ProgressDialog(this);
         pDialog.setMessage("Getting data from server...");
         pDialog.setCancelable(false);
